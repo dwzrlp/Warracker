@@ -207,14 +207,14 @@ class AppriseNotificationHandler:
                 title = f"{self.title_prefix} Test Notification"
                 body = "This is a test notification from Warracker to verify your Apprise configuration is working correctly."
                 
-                return test_apprise.notify(title=title, body=body)
+                return bool(test_apprise.notify(title=title, body=body))
             
             elif self.enabled and self.apprise_obj:
                 # Use configured URLs
                 title = f"{self.title_prefix} Test Notification"
                 body = "This is a test notification from Warracker to verify your Apprise configuration is working correctly."
                 
-                return self.apprise_obj.notify(title=title, body=body)
+                return bool(self.apprise_obj.notify(title=title, body=body))
             else:
                 logger.warning("Apprise not enabled or configured for test notification")
                 return False
@@ -319,7 +319,7 @@ class AppriseNotificationHandler:
 
             body = "\n".join(body_lines)
 
-            return self.apprise_obj.notify(title=title, body=body)
+            return bool(self.apprise_obj.notify(title=title, body=body))
 
         except Exception as e:
             logger.error(f"Error sending expiration batch notification: {e}")
@@ -343,12 +343,12 @@ class AppriseNotificationHandler:
                     return False
                 
                 full_title = f"{self.title_prefix} {title}"
-                return custom_apprise.notify(title=full_title, body=message)
+                return bool(custom_apprise.notify(title=full_title, body=message))
             
             elif self.is_available():
                 # Use configured URLs
                 full_title = f"{self.title_prefix} {title}"
-                return self.apprise_obj.notify(title=full_title, body=message)
+                return bool(self.apprise_obj.notify(title=full_title, body=message))
             else:
                 logger.warning("No Apprise configuration available for custom notification")
                 return False
@@ -476,7 +476,7 @@ class AppriseNotificationHandler:
 
             body = "\n".join(body_lines)
 
-            return self.apprise_obj.notify(title=title, body=body)
+            return bool(self.apprise_obj.notify(title=title, body=body))
 
         except Exception as e:
             logger.error(f"Error sending global expiration batch notification: {e}")
@@ -573,7 +573,7 @@ class AppriseNotificationHandler:
 
             body = "\n".join(body_lines)
 
-            return self.apprise_obj.notify(title=title, body=body)
+            return bool(self.apprise_obj.notify(title=title, body=body))
 
         except Exception as e:
             logger.error(f"Error sending individual expiration batch notification: {e}")
