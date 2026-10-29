@@ -160,6 +160,52 @@ volumes:
 
 To get the docker compose file with environemts and .env example for warracker and the warrackerdb please go [here](https://github.com/sassanix/Warracker/tree/main/Docker)
 
+## 🧑‍💻Development
+
+### Project Layout
+
+| Path | Purpose |
+|------|---------|
+| `backend/` | Flask application (`create_app()` factory in `backend/__init__.py`), route blueprints, Apprise / OIDC / Paperless integrations, `gunicorn_config.py`, `requirements.txt` |
+| `backend/migrations/` | SQL / Python migrations applied on startup by `apply_migrations.py` |
+| `frontend/` | Static HTML / CSS / JavaScript served by Nginx (no build step); vendored libraries live in `frontend/js/lib/` and `frontend/chart.js` |
+| `locales/` | i18next JSON translations (`locales/<lang>/translation.json`) and Babel catalogs for backend messages |
+| `Docker/` | `entrypoint.sh`, `supervisord.conf`, `nginx-wrapper.sh` and the pull-based `docker-compose.yml` / `.env.example` |
+| `Dockerfile`, `nginx.conf` | Image build: Python 3.15 (Debian trixie) + Nginx + Supervisor + Gunicorn (gevent workers) |
+| `docker-compose.yml` | Builds the image from source together with a `postgres:15-alpine` database |
+
+### Run From Source
+
+```bash
+cp env.example .env   # fill in DB_PASSWORD, DB_ADMIN_PASSWORD, SECRET_KEY, ...
+docker compose up --build
+```
+
+The app is served at `http://localhost:8005`. On startup the container waits for PostgreSQL, applies migrations, fixes permissions, compiles translations (`pybabel compile -d locales`) and starts Nginx + Gunicorn through Supervisor.
+
+### Environment Variables
+
+See `env.example` and `Docker/.env.example` for the full list. Main variables:
+
+* Database: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_ADMIN_USER`, `DB_ADMIN_PASSWORD`
+* Security: `SECRET_KEY` (use at least 32 random bytes; it signs Flask sessions and JWTs), `JWT_EXPIRATION_HOURS`
+* Email: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_ADDRESS`, `SMTP_SENDER_EMAIL`, `SMTP_USE_TLS`, `SMTP_USE_SSL`
+* URLs: `FRONTEND_URL`, `APP_BASE_URL`
+* OIDC: `OIDC_ENABLED`, `OIDC_PROVIDER_NAME`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET`, `OIDC_ISSUER_URL`, `OIDC_SCOPE`, `OIDC_ADMIN_GROUP`
+* Apprise: `APPRISE_ENABLED`, `APPRISE_URLS`, `APPRISE_EXPIRATION_DAYS`, `APPRISE_NOTIFICATION_TIME`, `APPRISE_TITLE_PREFIX`
+* Runtime: `WARRACKER_MEMORY_MODE` (`optimized` / `ultra-light` / `performance`), `MAX_UPLOAD_MB`, `NGINX_MAX_BODY_SIZE_VALUE`, `UPLOAD_FOLDER`
+
+### Checks
+
+There is no automated test suite. Before submitting changes, at least run:
+
+```bash
+python -m compileall -q backend
+pip install -r backend/requirements.txt   # in a virtualenv; building psycopg2 needs libpq (pg_config)
+```
+
+Dependency updates are handled by Renovate (`renovate.json`, `.github/workflows/renovate.yml`).
+
 ## 📝 Usage
 
 ### Accounts & Roles
