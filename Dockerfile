@@ -1,17 +1,17 @@
-# syntax=docker/dockerfile:1.19.0@sha256:b6afd42430b15f2d2a4c5a02b919e98a525b785b1aaff16747d2f623364e39b6
+# syntax=docker/dockerfile:1.28.0@sha256:bb22d9815c728170f72750f4e5b0d672e06176142e1d602c7e66c050100b7e5b
 
 # renovate: datasource=deb depName=build-essential
 ARG BUILD_ESSENTIAL_VERSION=12.12
 # renovate: datasource=deb depName=libpq-dev
-ARG LIBPQ_DEV_VERSION=17.6-0+deb13u1
+ARG LIBPQ_DEV_VERSION=17.11-0+deb13u1
 # renovate: datasource=deb depName=libcurl4-openssl-dev
-ARG LIBCURL4_OPENSSL_DEV_VERSION=8.14.1-2
+ARG LIBCURL4_OPENSSL_DEV_VERSION=8.14.1-2+deb13u5
 # renovate: datasource=deb depName=libssl-dev
-ARG LIBSSL_DEV_VERSION=3.5.1-1+deb13u1
+ARG LIBSSL_DEV_VERSION=3.5.7-1~deb13u2
 # renovate: datasource=deb depName=pkg-config
 ARG PKG_CONFIG_VERSION=1.8.1-4
 # renovate: datasource=deb depName=nginx
-ARG NGINX_VERSION=1.26.3-3+deb13u1
+ARG NGINX_VERSION=1.26.3-3+deb13u7
 # renovate: datasource=deb depName=supervisor
 ARG SUPERVISOR_VERSION=4.2.5-3
 # renovate: datasource=deb depName=postgresql-client
@@ -19,15 +19,15 @@ ARG POSTGRESQL_CLIENT_VERSION=17+278
 # renovate: datasource=deb depName=gettext-base
 ARG GETTEXT_BASE_VERSION=0.23.1-2
 # renovate: datasource=deb depName=curl
-ARG CURL_VERSION=8.14.1-2
+ARG CURL_VERSION=8.14.1-2+deb13u5
 # renovate: datasource=deb depName=ca-certificates
 ARG CA_CERTIFICATES_VERSION=20250419
 # renovate: datasource=deb depName=libpq5
-ARG LIBPQ5_VERSION=17.6-0+deb13u1
+ARG LIBPQ5_VERSION=17.11-0+deb13u1
 # renovate: datasource=deb depName=libssl3t64
-ARG LIBSSL3T64_VERSION=3.5.1-1+deb13u1
+ARG LIBSSL3T64_VERSION=3.5.7-1~deb13u2
 
-FROM python:3.13-slim-trixie@sha256:079601253d5d25ae095110937ea8cfd7403917b53b077870bccd8b026dc7c42f AS builder
+FROM python:3.15-slim-trixie@sha256:94d3426f1def7db4a106a232ac121bfd975393e5dfd40a619b955fae45fe7913 AS builder
 
 ARG BUILD_ESSENTIAL_VERSION
 ARG LIBPQ_DEV_VERSION
@@ -54,7 +54,7 @@ COPY backend/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 
-FROM python:3.13-slim-trixie@sha256:079601253d5d25ae095110937ea8cfd7403917b53b077870bccd8b026dc7c42f AS runtime
+FROM python:3.15-slim-trixie@sha256:94d3426f1def7db4a106a232ac121bfd975393e5dfd40a619b955fae45fe7913 AS runtime
 
 ARG NGINX_VERSION
 ARG SUPERVISOR_VERSION

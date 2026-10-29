@@ -1,4 +1,4 @@
-const CACHE_NAME = 'warracker-cache-v20251030001';
+const CACHE_NAME = 'warracker-cache-v20261029001';
 const urlsToCache = [
   // HTML pages
   './',
@@ -37,12 +37,12 @@ const urlsToCache = [
 
   // i18n libraries and config (versioned)
   './js/i18n.js?v=20250119001',
-  './js/lib/i18next.min.js?v=20250119001',
-  './js/lib/i18nextHttpBackend.min.js?v=20250119001',
-  './js/lib/i18nextBrowserLanguageDetector.min.js?v=20250119001',
+  './js/lib/i18next.min.js?v=20261029001',
+  './js/lib/i18nextHttpBackend.min.js?v=20261029001',
+  './js/lib/i18nextBrowserLanguageDetector.min.js?v=20261029001',
 
   // Charts
-  './chart.js?v=20250119001',
+  './chart.js?v=20261029001',
 
   // App manifest and icons
   './manifest.json',
